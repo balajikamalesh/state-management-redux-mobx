@@ -4,7 +4,6 @@
 - Pure vs Impure Fucntions
 
     js```
-    //pure
     function add(a, b) {
         return a + b;
     }
