@@ -8,7 +8,6 @@
         return a + b;
     }
 
-    //impure
     const b = 3;
     function add(b){
         return a + b;
