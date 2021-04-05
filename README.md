@@ -1,6 +1,6 @@
 # State Management using Redux and MobX
 
-## Prerequisits
+## Prerequisite
 - Pure vs Impure Functions
 
 ```js
@@ -149,4 +149,78 @@ const store = createStore(reducer, applyMiddleware(logger))
 ```js
 import { createStore } from 'redux';
 import { connect, Provider } from 'react-redux';
+```
+
+## Interagting Redux and Redux 
+- Sample counter app
+- Create a "reducer" function and using this, create a redux "store" using "createStore()" function
+```js
+import { createStore } from 'redux';
+import { connect, Provider} from 'react-redux';
+
+const initialState = {
+    count: 0
+}
+
+const INCREMENT = "INCREMENT";
+const DECREMENT = "DECREMENT";
+const RESET = "RESET";
+
+const reducer = (state = initialState, action) => {
+    if(action.type === INCREMENT){
+        return { ...state, count: state.count + 1 }
+    } else if(action.type === DECREMENT){
+        return { ...state, count: state.count - 1 }
+    } else if(action.type === RESET){
+        return { ...state, count: 0 }
+    }
+    return state;
+}
+
+const store = createStore(reducer);
+```
+- Create dipatch methods for actions with action type
+```js
+ const increment = () => ({
+    type: INCREMENT
+})
+
+const decrement = () => ({
+    type: DECREMENT
+})
+
+const reset = () => ({
+    type: RESET
+})
+```
+- define "mapStateToProps" and "mapDispatchToProps" methods and use the "connect()" method to connect the component the store
+```js
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = { increment, decrement, reset };
+const CounterContainer = connect(mapStateToProps, mapDispatchToProps)(Counter);
+```
+- wrap the "ContainerComponent" using the "Provider" component and pass the created store as a prop
+```js
+render(<Provider store={store}>
+            <CounterContainer />
+        </Provider>, document.getElementById('root'));
+```
+- access the store values in the component as props.
+```js
+class Counter extends Component {
+    render() {
+        const { count, increment, decrement, reset } = this.props;
+
+        return (
+            <main className="Counter">
+                <p className="count">{count}</p>
+                <section className="controls">
+                <button onClick={increment}>Increment</button>
+                <button onClick={decrement}>Decrement</button>
+                <button onClick={reset}>Reset</button>
+                </section>
+            </main>
+        );
+    }
+}
 ```
